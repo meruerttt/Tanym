@@ -2,8 +2,6 @@ import ctypes
 import os
 from llama_cpp import Llama, llama_log_set
 
-from ml.prompts.promt_for_feedback import prompt_for_check_task
-
 
 
 
@@ -22,7 +20,7 @@ model_path = os.path.abspath("C:/Users/User/Tanym/ml/save_models/Saiga-MIstral-7
 try:
     llm = Llama(
         model_path=model_path,
-        n_ctx=4096,
+        n_ctx=2048,
         n_threads=6,
         use_mlock=False,
         use_mmap=True,
@@ -38,10 +36,11 @@ except Exception as e:
 def generate(prompt: str):
     response = llm(
         prompt,
-        max_tokens=800,
-        temperature=0.3,
-        top_p=0.95,
-        repeat_penalty=1.1,
+        max_tokens=256,
+        temperature=0.2,
+        top_p=0.9,
+        top_k=40,
+        repeat_penalty=1.15,
         stop=["---", "Задание:", "Следующее задание"],
         echo=False,
         stream=False
