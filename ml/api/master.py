@@ -6,7 +6,7 @@ import logging
 
 from ml.model.saiga_model import generate
 from ml.prompts.promt_for_feedback import prompt_for_check_task
-
+from ml.utils.logs.logger import log_feedback_entry
 
 
 logging.basicConfig(level=logging.INFO)
@@ -82,6 +82,17 @@ async def check_task(req: TaskRequest):
                 detail="Не удалось сгенерировать фидбэк, что-то пошло не так"
             )
         logger.info("Фидбэк готов, всё ок!")
+
+        log_feedback_entry(
+            subject=req.subject,
+            grade=req.grade,
+            task=req.task,
+            student_answer=req.student_answer,
+            feedback=result,
+            model_version="saiga-mistral-q4",
+            template_version="feedback_prompt_v1.1"
+        )
+
         return TaskResponse(feedback=result)
     except Exception as e:
         logger.error(f"Ошибка при обработке: {str(e)}")
@@ -109,6 +120,12 @@ async def feedback(assessment: str):
         )
     logger.info(f"Возвращаем оценку: {assessment}")
     return FeedbackResponse(assessment=assessment)
+
+
+@app.post("/test_generate", summary="Протестировать генерацию")
+async def test(prompt: str):
+    result = generate(prompt)
+    return result
 
 
 
