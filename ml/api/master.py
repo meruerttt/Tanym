@@ -1,11 +1,12 @@
 import uvicorn
 from fastapi import FastAPI
 
-from ml.api.routers import qa, feedback, task
+from ml.api.routers import qa, feedback
+
 
 app = FastAPI(
     title="Таным для Образования",
-    description="API для проверки заданий учеников и дачи фидбэка",
+    description="API для проверки заданий учеников",
     version="1.0.0",
     docs_url="/docs",
     redoc_url="/redoc"
@@ -13,7 +14,6 @@ app = FastAPI(
 
 app.include_router(qa.router)
 app.include_router(feedback.router)
-app.include_router(task.router)
 
 @app.get("/", summary="Главная страница", response_model=dict)
 async def root():

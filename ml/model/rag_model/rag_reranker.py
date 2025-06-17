@@ -1,8 +1,11 @@
 import numpy as np
 from typing import List
+
 from langchain.schema import Document
-from langchain_community.embeddings import HuggingFaceEmbeddings
+from langchain_huggingface import HuggingFaceEmbeddings
+
 from sklearn.metrics.pairwise import cosine_similarity
+
 
 class CosineReranker:
     def __init__(self, embedding_model_name: str):
